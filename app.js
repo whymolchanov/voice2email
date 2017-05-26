@@ -1,26 +1,23 @@
-const nodemailer = require('nodemailer');
-const config = require('./config/config.js')
+const MailSender = require('./src/MailSender.js');
+const http = require('http');
+const PORT = 3000;
+const server = http.createServer();
 
-let transporter = nodemailer.createTransport(
-    {
-        service: config.service,
-        auth: {
-            user: config.auth.user,
-            pass: config.auth.pass
-        }
+server.on('request', (req) => {
+    console.log('requested');
+    let body = [];
+    if (req.method === 'POST') {
+        req.on('data', (chunk) => {
+            body.push(chunk);
+        });
+        req.on('end', () => {
+            body = JSON.parse(Buffer.concat(body).toString());
+            MailSender.sendMail(body.title, body.mailBody);
+        });
     }
-);
 
-let mailOptions = {
-    from: config.sender,
-    to: config.receiver,
-    subject: 'Test',
-    text: 'Supertest'
-};
+});
 
-transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        return console.log(error);
-    }
-    console.log('Message is sent');
+server.listen(PORT, () => {
+    console.log(`server started on {$PORT} port`);
 });
