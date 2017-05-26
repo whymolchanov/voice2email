@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This class using to send emails from one email address to one email address.
+ * For it's proper work user need to create right config and put it in a right place.
+ * Put proper email subject and text into sendMail method and it's good to go.
+ * Config must consist email provider name, login and password to email box from wich there will
+ * be a email sending exist.
+ */
+
 const nodemailer = require('nodemailer');
 const config = require('../config/config.js');
 
