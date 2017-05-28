@@ -1,7 +1,8 @@
+const config = require('./config/config.js');
 const http = require('http');
 const server = http.createServer();
-const PORT = 3000;
-const ENDPOINT = require('./config/config.js').endpoint;
+const PORT = config.port;
+const ENDPOINT = config.endpoint;
 
 const MailSender = require('./src/MailSender.js');
 const ServerUtilities = require('./src/ServerUtilities.js');
