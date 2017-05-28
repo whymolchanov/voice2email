@@ -71,7 +71,7 @@ function getMailOptions(mailSubject, mailBodyText) {
  * @return {boolean}
  */
 function checkEmailTextValidity(emailText) {
-    return (emailText.title || emailText.body) ? true : false;
+    return (emailText.subject || emailText.body) ? true : false;
 }
 
 /**
@@ -81,7 +81,7 @@ function checkEmailTextValidity(emailText) {
  */
 function sendMail(emailText) {
     if (!checkEmailTextValidity(emailText)) {
-        return Promise.reject('no appropriate data');
+        return Promise.reject('There is not appropriate data for email sending');
     }
     let transport = createTransport(config);
     let mailOptions = getMailOptions(emailText.subject, emailText.body);
