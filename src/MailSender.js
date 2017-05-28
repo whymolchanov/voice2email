@@ -64,15 +64,27 @@ function getMailOptions(mailSubject, mailBodyText) {
 }
 
 /**
+ * Check does emailText object has a title or body fields. If one or another
+ * exist - we can send message, if no one is exist - we don't send message
+ * @param {Object} emailText
+ * @private
+ * @return {boolean}
+ */
+function checkEmailTextValidity(emailText) {
+    return (emailText.title || emailText.body) ? true : false;
+}
+
+/**
  * @public
- * @param {string} mailSubject
- * @param {string} mailBodyText
+ * @param {{subject: string, body: string}} emailText
  * @return {Promise}
  */
-function sendMail(mailSubject, mailBodyText) {
-
+function sendMail(emailText) {
+    if (!checkEmailTextValidity(emailText)) {
+        return Promise.reject('no appropriate data');
+    }
     let transport = createTransport(config);
-    let mailOptions = getMailOptions(mailSubject, mailBodyText);
+    let mailOptions = getMailOptions(emailText.subject, emailText.body);
 
     return transport.sendMail(mailOptions);
 }
