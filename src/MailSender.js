@@ -8,6 +8,8 @@
 
 const nodemailer = require('nodemailer');
 const config = require('../config/config.js');
+const emailSubjectField = config.requestParams.emailSubject;
+const emailBodyField = config.requestParams.emailBody;
 
 /**
  * @typedef {Object} UserAuth - users auth-data necessary to send email
@@ -64,27 +66,32 @@ function getMailOptions(mailSubject, mailBodyText) {
 }
 
 /**
- * Check does emailText object has a title or body fields. If one or another
- * exist - we can send message, if no one is exist - we don't send message
- * @param {Object} emailText
+ * Check that email message object has fields on wich user points in config.
+ * If one or another exist - we can send message,
+ * if no one is exist - we don't send message
+ * @param {Object} emailMessageObject
  * @private
  * @return {boolean}
  */
-function checkEmailTextValidity(emailText) {
-    return (emailText.subject || emailText.body) ? true : false;
+function checkEmailMessageValidity(emailMessageObject) {
+    if (emailMessageObject[emailSubjectField] || emailMessageObject[emailBodyField]) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
  * @public
- * @param {{subject: string, body: string}} emailText
+ * @param {Object} emailMessageObject
  * @return {Promise}
  */
-function sendMail(emailText) {
-    if (!checkEmailTextValidity(emailText)) {
+function sendMail(emailMessageObject) {
+    if (!checkEmailMessageValidity(emailMessageObject)) {
         return Promise.reject('There is not appropriate data for email sending');
     }
     let transport = createTransport(config);
-    let mailOptions = getMailOptions(emailText.subject, emailText.body);
+    let mailOptions = getMailOptions(emailMessageObject[emailSubjectField], emailMessageObject[emailBodyField]);
 
     return transport.sendMail(mailOptions);
 }
