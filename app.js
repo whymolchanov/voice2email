@@ -1,14 +1,16 @@
 const config = require('./config/config.js');
 const http = require('http');
-const server = http.createServer();
-const PORT = config.port;
-const ENDPOINT = config.endpoint;
-
+const url = require('url');
 const MailSender = require('./src/MailSender.js');
 const ServerUtilities = require('./src/ServerUtilities.js');
 
+const server = http.createServer();
+const PORT = config.endpoint.port;
+const ENDPOINT_PATH = config.endpoint.pathname;
+
 server.on('request', (req, res) => {
-    if (req.url === ENDPOINT) {
+    let endpointPathname = url.parse(req.url).pathname;
+    if (endpointPathname === ENDPOINT_PATH) {
         ServerUtilities.getPostRequestBody(req)
             .then(MailSender.sendMail, (errorMessage) => {
                 console.log(errorMessage);

@@ -6,6 +6,13 @@ module.exports = {
         user: 'logindata', // login to account from whom will be send email
         pass: 'superpassword' // password for this account
     },
-    endpoint: '/voice2email/send', // endpoint on wich pebble will send text (you can write it in Voice2Email app admin)
-    port: 3000
+    endpoint: {
+        pathname: '/voice2email/send',
+        method: 'POST', // POST or GET only allowed
+        port: 3000
+    },
+    requestParams: { // required
+        emailSubject: 'subject',
+        emailBody: 'body'
+    }
 };
