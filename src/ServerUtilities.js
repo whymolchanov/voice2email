@@ -3,6 +3,8 @@
  * for such small task.
  */
 
+const url = require('url');
+
 /**
  * Hide work that must be done to get a request body.
  * @param {http.IncomingMessage} request
@@ -27,6 +29,19 @@ function getPostRequestBody(request) {
     });
 }
 
+/**
+ * Extracts query parameters from request object.
+ * @param {http.IncomingMessage} request
+ * @return {Promise}
+ */
+function getQueryParams(request) {
+    return new Promise((resolve, reject) => {
+        let queryParamsObject = url.parse(request.url, true).query;
+        resolve(queryParamsObject);
+    })
+}
+
 module.exports = {
-    getPostRequestBody: getPostRequestBody
+    getPostRequestBody: getPostRequestBody,
+    getQueryParams: getQueryParams
 }
