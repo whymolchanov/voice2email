@@ -8,7 +8,6 @@ module.exports = {
     },
     endpoint: {
         pathname: '/voice2email/send',
-        method: 'POST', // POST or GET only allowed
         port: 3000
     },
     requestParams: { // required
