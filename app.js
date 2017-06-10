@@ -3,6 +3,7 @@ const http = require('http');
 const url = require('url');
 const MailSender = require('./src/MailSender.js');
 const ServerUtilities = require('./src/ServerUtilities.js');
+const RequestParametersParser = require('./src/RequestParametersParser.js');
 
 const server = http.createServer();
 const PORT = config.endpoint.port;
@@ -11,7 +12,7 @@ const ENDPOINT_PATH = config.endpoint.pathname;
 server.on('request', (req, res) => {
     let endpointPathname = url.parse(req.url).pathname;
     if (endpointPathname === ENDPOINT_PATH) {
-        ServerUtilities.getPostRequestBody(req)
+        RequestParametersParser.parse(req)
             .then(MailSender.sendMail, (errorMessage) => {
                 console.log(errorMessage);
             })
