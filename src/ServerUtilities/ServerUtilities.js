@@ -4,6 +4,7 @@
  */
 
 const url = require('url');
+const http = require('http');
 
 /**
  * Hide work that must be done to get a request body.
@@ -36,6 +37,9 @@ function getPostRequestBody(request) {
  */
 function getQueryParams(request) {
     return new Promise((resolve, reject) => {
+        if (!(request instanceof http.IncomingMessage)) {
+            return reject(new Error('request not an instance of http.IncomingMessage'));
+        }
         let queryParamsObject = url.parse(request.url, true).query;
         resolve(queryParamsObject);
     })

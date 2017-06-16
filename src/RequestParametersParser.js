@@ -3,7 +3,7 @@
  * Check request method and use appropriate ServerUtilities utility function.
  */
 
-const serverUtilities = require('./ServerUtilities.js');
+const serverUtilities = require('./ServerUtilities/ServerUtilities.js');
 
 /**
  * @param {http.IncomingMessage} request

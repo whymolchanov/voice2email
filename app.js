@@ -2,7 +2,7 @@ const config = require('./config/config.js');
 const http = require('http');
 const url = require('url');
 const MailSender = require('./src/MailSender.js');
-const ServerUtilities = require('./src/ServerUtilities.js');
+const ServerUtilities = require('./src/ServerUtilities/ServerUtilities.js');
 const RequestParametersParser = require('./src/RequestParametersParser.js');
 
 const server = http.createServer();
