@@ -4,6 +4,8 @@
  */
 
 const url = require('url');
+const http = require('http');
+const winston = require('../configuredWinston.js');
 
 /**
  * Hide work that must be done to get a request body.
@@ -13,7 +15,9 @@ const url = require('url');
  */
 function getPostRequestBody(request) {
     return new Promise((resolve, reject) => {
+        winston.debug('ServerUtilities#getPostRequestBody running');
         if (request.method !== 'POST') {
+            winston.warn('Request object is not POST method');
             return reject('Request object is not POST method');
         }
 
@@ -23,8 +27,10 @@ function getPostRequestBody(request) {
             body.push(chunk);
         });
         request.on('end', () => {
+            winston.debug('Request body parsing is over');
             let parsedBody = JSON.parse(Buffer.concat(body).toString());
             resolve(parsedBody);
+            winston.debug('ServerUtilities#getPostRequestBody resolved');
         });
     });
 }
@@ -36,8 +42,14 @@ function getPostRequestBody(request) {
  */
 function getQueryParams(request) {
     return new Promise((resolve, reject) => {
+        winston.debug('ServerUtilities#getQueryParams running');
+        if (!(request instanceof http.IncomingMessage)) {
+            winston.warn('Request isn\'t an instance of http.IncomingMessage');
+            return reject(new Error('request not an instance of http.IncomingMessage'));
+        }
         let queryParamsObject = url.parse(request.url, true).query;
         resolve(queryParamsObject);
+        winston.debug('ServerUtilities#getQueryParams stop running');
     })
 }
 
