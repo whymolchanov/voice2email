@@ -5,7 +5,7 @@
 
 const url = require('url');
 const http = require('http');
-const winston = require('../configuredWinston.js');
+const winston = require('../ConfiguredWinston.js');
 
 /**
  * Hide work that must be done to get a request body.
