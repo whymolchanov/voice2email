@@ -12,8 +12,9 @@ server.on('request', (req, res) => {
     let endpointPathname = url.parse(req.url).pathname;
     if (endpointPathname === ENDPOINT_PATH) {
         RequestParametersParser.parse(req)
-            .then(MailSender.sendMail, (errorMessage) => {
-                console.log(errorMessage);
+            .then(MailSender.sendMail, (error) => {
+                res.writeHead(400, {'Content-type': 'text/plain'});
+                res.end(`Email was not send, because of ${error}`);
             })
             .then(() => {
                 res.writeHead(200, {'Content-type': 'text/plain'});
