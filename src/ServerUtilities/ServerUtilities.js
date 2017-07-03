@@ -28,7 +28,14 @@ function getPostRequestBody(request) {
         });
         request.on('end', () => {
             winston.debug('Request body parsing is over');
-            let parsedBody = JSON.parse(Buffer.concat(body).toString());
+
+            try {
+                var parsedBody = JSON.parse(Buffer.concat(body).toString());
+            } catch (e) {
+                winston.warn(`Request body is not valid JSON -> ${e.stack}`);
+                return reject(e);
+            }
+
             resolve(parsedBody);
             winston.debug('ServerUtilities#getPostRequestBody resolved');
         });
